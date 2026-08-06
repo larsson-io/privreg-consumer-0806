@@ -1,0 +1,14 @@
+name: consume-registry
+on: [workflow_dispatch, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: show injected npm config (names only)
+        run: |
+          echo "--- .npmrc present? ---"
+          test -f ~/.npmrc && sed -E 's/(_authToken=|:_auth=).*/\1<REDACTED>/' ~/.npmrc || echo "no ~/.npmrc"
+          test -f .npmrc && sed -E 's/(_authToken=|:_auth=).*/\1<REDACTED>/' .npmrc || echo "no ./.npmrc"
+      - name: fetch from the configured registry
+        run: npm install --no-audit --no-fund || true
