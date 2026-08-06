@@ -5,10 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: show injected npm config (names only)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: npmrc after setup-node (redacted)
         run: |
-          echo "--- .npmrc present? ---"
-          test -f ~/.npmrc && sed -E 's/(_authToken=|:_auth=).*/\1<REDACTED>/' ~/.npmrc || echo "no ~/.npmrc"
-          test -f .npmrc && sed -E 's/(_authToken=|:_auth=).*/\1<REDACTED>/' .npmrc || echo "no ./.npmrc"
-      - name: fetch from the configured registry
+          test -f ~/.npmrc && sed -E 's/(_authToken=|:_auth=|_password=).*/\1<REDACTED>/' ~/.npmrc || echo "no ~/.npmrc"
+          echo "--- npm config registry ---"; npm config get registry
+      - name: fetch
         run: npm install --no-audit --no-fund || true
