@@ -1,0 +1,12 @@
+version: 2
+registries:
+  npm-private:
+    type: npm-registry
+    url: https://registry.npmjs.org
+updates:
+  - package-ecosystem: npm
+    directory: /
+    registries:
+      - npm-private
+    schedule:
+      interval: daily
